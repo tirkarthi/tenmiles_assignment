@@ -1,0 +1,40 @@
+{% extends "header.html" %}
+
+{% block body%}
+<div class="container-fluid">
+    <br>
+    <div>
+        <div class="panel panel-default col-sm-3 col-xs-3 pull-right" style="padding-left:4px; padding-right:4px;">
+            <div class="panel-heading">Sign up</div>
+            <div class="panel-body">
+                <form action="/signup/" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name" name="name">Name</label>
+                        <input type="text" class="form-control" placeholder="Name" id="name" name="name">
+                    </div>
+                                     
+                    <div class="form-group">
+                        <label for="email" name="email">Email ID</label>
+                        <input type="text" class="form-control" placeholder="Email ID" id="email" name="email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" name="password">Password</label>
+                        <input type="password" class="form-control" placeholder="Password" id="email" name="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company_info" name="company_info">Company Info</label>
+                        <input type="text" class="form-control" placeholder="Company info" id="company_info" name="company_info">
+                    </div>
+
+                    <button type="submit" class="btn btn-default btn-primary">Submit</button>
+                </form>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

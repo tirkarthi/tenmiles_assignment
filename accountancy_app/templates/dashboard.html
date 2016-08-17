@@ -1,0 +1,60 @@
+{% extends "header.html" %}
+
+{% block body%}
+<div class="container-fluid">
+    <h3> <b> Name : </b> {{ name }} </h3>
+    <h3> <b> Company Info : </b> {{ company_info }} </h3>
+    <div>
+        <h1> Monthly reports </h1>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>
+                    Month
+                </th>
+                <th>
+                    Cost
+                </th>
+            </tr>
+            {% for elem in monthly %}
+            <tr>
+                <td> {{ elem.month }}</td>
+                <td> {{ elem.cost }} </td>
+                {% endfor %}
+        </table>
+        <h1> Weekly reports </h1>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>
+                    Week
+                </th>
+                <th>
+                    Cost
+                </th>
+            </tr>
+            {% for elem in weekly %}
+            <tr>
+                <td> {{ elem.week }}</td>
+                <td> {{ elem.cost }} </td>
+                {% endfor %}
+        </table>
+
+        <h1> Yearly reports </h1>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>
+                    Year
+                </th>
+                <th>
+                    Cost
+                </th>
+            </tr>
+            {% for elem in yearly %}
+            <tr>
+                <td> {{ elem.year }}</td>
+                <td> {{ elem.cost }} </td>
+                {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
