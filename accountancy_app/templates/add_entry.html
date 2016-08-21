@@ -1,0 +1,151 @@
+{% extends "header.html" %}
+
+{% block body%}
+
+<div class="container-fluid">
+    <h3> <b> Name : </b> {{ name }} </h3>
+    <h3> <b> Company Info : </b> {{ company_info }} </h3>
+    <h2> <a class="pull-right" href="/signout/"> Logout </a> </h2>
+    <br>
+    <div id="add-entry">
+        <h3> Add time sheet entry</h3>
+        <br>
+        <span id="timesheet-entry-error" style="color: red"></span>
+        <br>
+        <select id="project-id" >
+        {% for project in projects %}
+            <option value="{{ project.id }}"> {{ project.id }}</option>
+                {% endfor %}
+        </select>
+        <input type="text" id="entry-date" placeholder="Date (YYYY-MM-DD)" />
+        <input type="text" id="entry-time" placeholder="Time spent in hours" />
+        <input type="button" class="btn btn-primary" id="add-timesheet-entry" value="Add" />
+    </div>
+    <div id="add-project">
+        <h3> Add new project</h3>
+        <br>
+        <span id="project-entry-error" style="color: red"></span>
+        <br>
+        <input type="text" id="start-date" placeholder="Date (YYYY-MM-DD)"/>
+        <input type="text" id="project-cost" placeholder="Cost per hour"/>
+        <input type="button" class="btn btn-primary" id="add-project-entry" value="Add" />
+    </div>
+
+    <div>
+        <h3>Projects </h3>
+        {% if projects %}
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>
+                    Project ID
+                </th>
+                <th>
+                    Project
+                </th>
+                <th>
+                    Cost
+                </th>
+                <th>
+                    View
+                </th>
+            </tr>
+            {% for project in projects %}
+            <tr>
+                <td> {{ project.id }}</td>
+                <td> {{ project.start_date }}</td>
+                <td> {{ project.cost_per_hour }} </td>
+                <td> <a href="/projects/{{ project.id }}" target="_blank"> View report </a> </td>
+                {% endfor %}
+        </table>
+        {% else %}
+        <h3> No entries found </h3>
+        {% endif %}
+
+        <h3>Timesheets </h3>
+        {% if timesheets %}
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>
+                    Project ID
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Time spent
+                </th>
+            </tr>
+            {% for timesheet in timesheets %}
+            <tr>
+                <td> {{ timesheet.project_id }} </td>
+                <td> {{ timesheet.date }} </td>
+                <td> {{ timesheet.time_spent }} </td>
+                {% endfor %}
+        </table>
+        {% else %}
+        <h3> No entries found </h3>
+        {% endif %}
+
+    </div>
+</div>
+
+<script type="text/javascript">
+ $('#add-timesheet-entry').click(function(ev) {
+     ev.preventDefault();
+     $('timesheet-entry-error').val('');
+     var entry_project_id = $('#project-id').val();
+     var entry_hours = $('#entry-time').val();
+     var entry_date = $('#entry-date').val();
+
+     if (typeof entry_project_id == "undefined" ||  entry_hours == "" || entry_date == "") {
+         $('#timesheet-entry-error').html('Invalid data');
+         return false;
+     }
+
+     $.post({
+         url: "/api/timesheets/",
+         data: {
+             project: entry_project_id,
+             date: entry_date,
+             time_spent: entry_hours,
+         },
+         success: function(data) {
+             location.reload();
+         },
+         error: function(data) {
+             $('#timesheet-entry-error').html(data['responseJSON']['non_field_errors']);
+         },
+     });
+
+ });
+
+ $('#add-project-entry').click(function(ev) {
+     ev.preventDefault();
+     $('project-entry-error').val('')
+     var start_date = $('#start-date').val()
+     var cost_per_hour = $('#project-cost').val();
+
+     if (start_date == "" || cost_per_hour == "") {
+         $('#project-entry-error').html('Invalid data');
+         return false;
+     }
+     
+     $.post({
+         url: "/api/projects/",
+         data: {
+             start_date: start_date,
+             cost_per_hour: cost_per_hour,
+         },
+         success: function(data) {
+             location.reload();
+         },
+         error: function(data) {
+             $('#project-entry-error').html(data['responseJSON']['non_field_errors']);
+         },
+     });
+ });
+
+</script>
+
+
+{% endblock %}

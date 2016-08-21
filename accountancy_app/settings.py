@@ -25,9 +25,9 @@ from .config import config
 SECRET_KEY = config.get('secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config.get('debug', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'billcalc',
-    'rest_framework'
+    'rest_framework',
+    'django_extensions'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -74,7 +75,6 @@ TEMPLATES = [
 ]
 
 
-
 WSGI_APPLICATION = 'accountancy_app.wsgi.application'
 
 
@@ -85,9 +85,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': config['database']['name'],
-        'HOST' : config['database']['host'],
+        'HOST': config['database']['host'],
         'USER': config['database']['user'],
-        'PASSWORD' : config['database']['password']
+        'PASSWORD': config['database']['password']
     }
 }
 
@@ -112,3 +112,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/signin/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
